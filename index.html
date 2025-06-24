@@ -5,26 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>線上 IFC Viewer</title>
   <script type="module">
-    import { IfcViewerAPI } from 'https://unpkg.com/web-ifc-viewer@latest/dist/ifc-viewer.esm.js';
-    import { Color } from 'https://unpkg.com/three@0.152.2/build/three.module.js';
+  import { IfcViewerAPI } from 'https://unpkg.com/web-ifc-viewer@latest/dist/ifc-viewer.esm.js';
+  import { Color } from 'https://unpkg.com/three@0.152.2/build/three.module.js';
 
-    window.onload = () => {
-      const container = document.getElementById('viewer-container');
-      const viewer = new IfcViewerAPI({ container, backgroundColor: new Color(0xffffff) });
+  window.onload = () => {
+    const container = document.getElementById('viewer-container');
+    const viewer = new IfcViewerAPI({ container, backgroundColor: new Color(0xffffff) });
 
-      viewer.axes.setAxes();
-      viewer.grid.setGrid();
+    viewer.axes.setAxes();
+    viewer.grid.setGrid();
 
-      const input = document.getElementById('file-input');
-      input.addEventListener('change', async (event) => {
-        const file = event.target.files[0];
-        if (file) {
-          const ifcURL = URL.createObjectURL(file);
-          await viewer.IFC.loadIfcUrl(ifcURL);
-        }
-      });
-    };
-  </script>
+    const input = document.getElementById('file-input');
+    input.addEventListener('change', async (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const ifcURL = URL.createObjectURL(file);
+        await viewer.IFC.loadIfcUrl(ifcURL);
+      }
+    });
+  };
+</script>
+
   <style>
     html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
     #viewer-container { width: 100vw; height: 90vh; }

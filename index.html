@@ -1,59 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>線上 IFC Viewer</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>IFC Viewer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- 引入 IFC.js 和 Three.js -->
-  <script type="module">
-    import { IfcViewerAPI } from 'https://unpkg.com/web-ifc-viewer@latest/dist/ifc-viewer.esm.js';
-    import { Color } from 'https://unpkg.com/three@0.152.2/build/three.module.js';
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        font-family: sans-serif;
+      }
+      #toolbar {
+        padding: 10px;
+        background: #f2f2f2;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        position: relative;
+      }
+      #viewer-container {
+        width: 100vw;
+        height: calc(100vh - 50px);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="toolbar">
+      <input type="file" id="file-input" accept=".ifc" />
+    </div>
+    <div id="viewer-container"></div>
 
-    window.onload = () => {
-      const container = document.getElementById('viewer-container');
-      const viewer = new IfcViewerAPI({ container, backgroundColor: new Color(0xf0f0f0) });
+    <script type="module">
+      import { IfcViewerAPI } from "https://unpkg.com/web-ifc-viewer@latest/dist/ifc-viewer.esm.js";
+      import { Color } from "https://unpkg.com/three@0.152.2/build/three.module.js";
 
-      viewer.axes.setAxes();
+      const container = document.getElementById("viewer-container");
+      const viewer = new IfcViewerAPI({
+        container,
+        backgroundColor: new Color(0xe0e0e0),
+      });
+
       viewer.grid.setGrid();
+      viewer.axes.setAxes();
 
-      const input = document.getElementById('file-input');
-      input.addEventListener('change', async (event) => {
+      const input = document.getElementById("file-input");
+      input.addEventListener("change", async (event) => {
         const file = event.target.files[0];
         if (file) {
-          const ifcURL = URL.createObjectURL(file);
-          await viewer.IFC.loadIfcUrl(ifcURL);
-          viewer.context.fitToFrame(); // 確保相機聚焦模型
+          const url = URL.createObjectURL(file);
+          await viewer.IFC.loadIfcUrl(url);
+          viewer.context.fitToFrame(); // 聚焦模型
         }
       });
-    };
-  </script>
-
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: sans-serif;
-      background-color: #f0f0f0;
-    }
-    #upload {
-      padding: 10px;
-      background: #ffffff;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    #viewer-container {
-      width: 100vw;
-      height: 90vh;
-    }
-  </style>
-</head>
-<body>
-  <div id="upload">
-    <label><strong>選擇 IFC 檔案：</strong></label>
-    <input type="file" id="file-input" accept=".ifc" />
-  </div>
-  <div id="viewer-container"></div>
-</body>
+    </script>
+  </body>
 </html>
